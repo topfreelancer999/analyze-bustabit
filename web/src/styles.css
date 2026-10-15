@@ -1,0 +1,432 @@
+/*
+ * Palette and chrome from the data-viz reference instance. Colors are declared
+ * as roles so the light and dark values swap in one place, and both the OS
+ * setting and an explicit theme choice are honoured.
+ */
+:root {
+  color-scheme: light;
+
+  --surface-1: #fcfcfb;
+  --page: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --gridline: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  /* Observed data and the fair-game reference it is compared against. */
+  --series-observed: #2a78d6;
+  --series-expected: #eb6834;
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --critical: #d03b3b;
+
+  --radius: 10px;
+  --gap: 16px;
+  --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --page: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --gridline: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --series-observed: #3987e5;
+    --series-expected: #d95926;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --surface-1: #1a1a19;
+  --page: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --gridline: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --series-observed: #3987e5;
+  --series-expected: #d95926;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-block: 24px;
+  padding-inline: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+  max-width: 70ch;
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.card-note {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Status bar */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 10px 16px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  background: var(--text-muted);
+}
+
+.status-dot.on {
+  background: var(--good);
+}
+
+.status-dot.off {
+  background: var(--critical);
+}
+
+.status strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.banner {
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+}
+
+.banner.error {
+  border-left: 3px solid var(--critical);
+}
+
+.banner.warn {
+  border-left: 3px solid var(--warning);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 12px 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+select,
+input[type='date'],
+button {
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--surface-1);
+  border: 1px solid var(--baseline);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--text-muted);
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--baseline);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.segmented button {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+}
+
+.segmented button + button {
+  border-left: 1px solid var(--baseline);
+}
+
+.segmented button[aria-pressed='true'] {
+  background: var(--series-observed);
+  color: #ffffff;
+}
+
+/* Stat tiles */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--gap);
+}
+
+.tile-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.tile-value {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.tile-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Charts */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--gap);
+}
+
+.legend {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.tooltip {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.tooltip-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.tooltip-row {
+  color: var(--text-secondary);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+th {
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--baseline);
+  padding: 6px 8px;
+  white-space: nowrap;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+td {
+  text-align: right;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--gridline);
+  color: var(--text-primary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* Hourly list: the per-hour view of raw multipliers */
+.hour-row {
+  display: grid;
+  grid-template-columns: 130px 92px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--gridline);
+}
+
+.hour-row:last-child {
+  border-bottom: none;
+}
+
+.hour-label {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.hour-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hour-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  min-width: 0;
+}
+
+.bust {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Size carries the multiplier so the eye can scan for big wins without
+   relying on color alone. */
+.bust.high {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.bust.huge {
+  color: var(--text-primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.bust.instant {
+  color: var(--text-muted);
+}
+
+.more {
+  background: none;
+  border: none;
+  color: var(--series-observed);
+  padding: 0 4px;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 24px 0;
+  text-align: center;
+}
+
+@media (max-width: 620px) {
+  .hour-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

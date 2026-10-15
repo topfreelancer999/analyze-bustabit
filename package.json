@@ -1,0 +1,43 @@
+{
+  "name": "analyze-bustabit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dashboard analysing bustabit crash multipliers grouped by hour of day",
+  "scripts": {
+    "collector": "node --watch --no-warnings=ExperimentalWarning collector/src/main.ts",
+    "collector:once": "node --no-warnings=ExperimentalWarning collector/src/main.ts",
+    "collector:dump": "node --no-warnings=ExperimentalWarning collector/src/main.ts --dump",
+    "backfill": "node --no-warnings=ExperimentalWarning collector/src/backfill.ts",
+    "runs": "node --no-warnings=ExperimentalWarning collector/src/runs.ts",
+    "simulate": "node --no-warnings=ExperimentalWarning collector/src/simulate.ts",
+    "simulate:after": "node --no-warnings=ExperimentalWarning collector/src/simulate-after-streak.ts",
+    "optimize": "node --no-warnings=ExperimentalWarning collector/src/optimize.ts",
+    "simulate:missing": "node --no-warnings=ExperimentalWarning collector/src/simulate-missing.ts",
+    "simulate:ladder": "node --no-warnings=ExperimentalWarning collector/src/simulate-ladder.ts",
+    "simulate:interval": "node --no-warnings=ExperimentalWarning collector/src/simulate-interval.ts",
+    "web": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.collector.json --noEmit && tsc -p tsconfig.web.json --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.10.1",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^5.0.2",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4",
+    "vitest": "^4.1.11"
+  }
+}
